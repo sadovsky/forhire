@@ -4,13 +4,9 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
-)
 
-type Character struct {
-	name string
-	str  int
-	hp   int
-}
+	. "github.com/sadovsky/forhire/Character"
+)
 
 type Player struct {
 	Character
@@ -21,19 +17,19 @@ type Player struct {
 func Battle(a *Character, b *Character) {
 	var at1 int
 	var at2 int
-	for (a.hp > 0) && (b.hp > 0) {
-		at1 = rand.Intn(a.str)
-		at2 = rand.Intn(b.str)
-		a.hp -= at2
-		fmt.Println(a.hp, "> ", a.name, " attacks ", b.name, " for ", at1, "damage!")
-		b.hp -= at1
-		fmt.Println(a.hp, ">", b.name, " attacks ", a.name, " for ", at2, "damage!")
+	for (a.Hp > 0) && (b.Hp > 0) {
+		at1 = rand.Intn(a.Str)
+		at2 = rand.Intn(b.Str)
+		a.Hp -= at2
+		fmt.Println(a.Hp, "> ", a.Name, " attacks ", b.Name, " for ", at1, "damage!")
+		b.Hp -= at1
+		fmt.Println(a.Hp, ">", b.Name, " attacks ", a.Name, " for ", at2, "damage!")
 	}
-	if a.hp > 0 {
-		fmt.Println(a.hp, ">", a.name, " slays ", b.name)
+	if a.Hp > 0 {
+		fmt.Println(a.Hp, ">", a.Name, " slays ", b.Name)
 	}
-	if b.hp > 0 {
-		fmt.Println(a.hp, ">", b.name, " slays ", a.name)
+	if b.Hp > 0 {
+		fmt.Println(a.Hp, ">", b.Name, " slays ", a.Name)
 	}
 }
 
@@ -41,17 +37,18 @@ func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
 
 	player := new(Player)
-	player.Character.name = "Runner"
-	player.Character.hp = 100
-	player.Character.str = 10
+	player.Character.Name = "Runner"
+	player.Character.Hp = 100
+	player.Character.Str = 10
 	player.level = 1
 
-	fmt.Println(player.Character.hp, ">")
+	fmt.Println(player.Character.Hp, ">")
 
-	for i := 0; i < 5; i++ {
-		drone := &Character{"Drone", 5, 25}
-		Battle(&player.Character, drone)
+	for i := 0; i < 3; i++ {
+		drone := Drone
+		//drone := &Character{"Drone", 5, 25}
+		Battle(&player.Character, &drone)
 	}
 
-	fmt.Println(player.Character.hp, ">")
+	fmt.Println(player.Character.Hp, ">")
 }

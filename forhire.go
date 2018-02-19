@@ -6,13 +6,19 @@ import (
 	"time"
 )
 
-type character struct {
+type Character struct {
 	name string
 	str  int
 	hp   int
 }
 
-func Battle(a *character, b *character) {
+type Player struct {
+	Character
+	xp    int
+	level int
+}
+
+func Battle(a *Character, b *Character) {
 	var at1 int
 	var at2 int
 	for (a.hp > 0) && (b.hp > 0) {
@@ -34,14 +40,18 @@ func Battle(a *character, b *character) {
 func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
 
-	tank := &character{"Runner", 20, 100}
+	player := new(Player)
+	player.Character.name = "Runner"
+	player.Character.hp = 100
+	player.Character.str = 10
+	player.level = 1
 
-	fmt.Println(tank.hp, ">")
+	fmt.Println(player.Character.hp, ">")
 
 	for i := 0; i < 5; i++ {
-		drone := &character{"Drone", 5, 25}
-		Battle(tank, drone)
+		drone := &Character{"Drone", 5, 25}
+		Battle(&player.Character, drone)
 	}
 
-	fmt.Println(tank.hp, ">")
+	fmt.Println(player.Character.hp, ">")
 }

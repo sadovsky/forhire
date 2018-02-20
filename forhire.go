@@ -6,6 +6,7 @@ import (
 	"time"
 
 	. "github.com/sadovsky/forhire/character"
+	. "github.com/sadovsky/forhire/game"
 	. "github.com/sadovsky/forhire/player"
 	. "github.com/sadovsky/forhire/term"
 )
@@ -15,9 +16,28 @@ func gameLoop() {
 	//initialize
 	rand.Seed(time.Now().UTC().UnixNano())
 
+	game := new(Game)
 	player := new(Player)
-	player.Character.Name = "Runner"
-	player.Initialize()
+
+	//TODO ask user
+	if game.SaveExists() {
+		fmt.Print("Load saved game? (Y/N)")
+		input := GetCh()
+		switch input {
+		case "y", "Y":
+			player = game.Load()
+			fmt.Println()
+			fmt.Println("Game Loaded!")
+			break
+		case "n", "N":
+			player.Character.Name = "Runner"
+			player.Initialize()
+			break
+		}
+	} else {
+		player.Character.Name = "Runner"
+		player.Initialize()
+	}
 
 GameLoop:
 	for {
@@ -34,6 +54,7 @@ GameLoop:
 		fmt.Println("+-------------------------------+")
 		fmt.Println("B to (B)attle")
 		fmt.Println("I for (I)nventory")
+		fmt.Println("S to (S)ave")
 		fmt.Println("Q to (Q)uit")
 		fmt.Println("+-------------------------------+")
 		player.Prompt()
@@ -47,9 +68,14 @@ GameLoop:
 		case "b", "B":
 			fmt.Print(input)
 			drone := Drone
-			Battle(&player.Character, &drone)
+			player.Battle(&drone)
 			GetCh()
 			continue
+		case "s", "S":
+			fmt.Print(input)
+			fmt.Println()
+			game.Save(player)
+			break GameLoop
 		case "i", "I":
 			fmt.Print(input)
 			fmt.Println()

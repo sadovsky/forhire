@@ -19,13 +19,21 @@ func gameLoop() {
 	player.Character.Name = "Runner"
 	player.Initialize()
 
-	//check for death
-
 GameLoop:
 	for {
+
+		if player.IsDead() {
+			ClearScreen()
+			fmt.Println("+-------------------------------+")
+			fmt.Println(player.Character.Name, "has perished...")
+			fmt.Println("+-------------------------------+")
+			break GameLoop
+		}
+
 		ClearScreen()
 		fmt.Println("+-------------------------------+")
 		fmt.Println("B to (B)attle")
+		fmt.Println("I for (I)nventory")
 		fmt.Println("Q to (Q)uit")
 		fmt.Println("+-------------------------------+")
 		player.Prompt()
@@ -40,6 +48,12 @@ GameLoop:
 			fmt.Print(input)
 			drone := Drone
 			Battle(&player.Character, &drone)
+			GetCh()
+			continue
+		case "i", "I":
+			fmt.Print(input)
+			fmt.Println()
+			player.PrintInventory()
 			GetCh()
 			continue
 		}
